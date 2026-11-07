@@ -1,0 +1,652 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Organizer Pro: sort any folder in one click</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap">
+<style>
+:root{--g:#d4af37;--gd:#8a6d0f;--k:#0d0d0d;--k2:#1a1a1a;--cream:#f6f3ea;--mute:#b9b5a8;--bad:#ff8a80;color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+*,*::before,*::after{box-sizing:inherit}
+html{scroll-padding-top:env(safe-area-inset-top,0px);scroll-behavior:smooth}
+body{margin:0;background:#fff;color:#0d0d0d;font:400 1rem/1.6 "Inter",system-ui,-apple-system,"Segoe UI",sans-serif}
+h1,h2,h3{font-weight:600;letter-spacing:-.025em;line-height:1.12;margin:0}
+[hidden]{display:none!important}
+.wrap{max-width:1040px;margin:0 auto;padding:0 20px}
+button,input{font:inherit}button{cursor:pointer}
+:focus-visible{outline:3px solid var(--g);outline-offset:3px}
+.btn{border:1px solid #0d0d0d;background:#fff;color:#0d0d0d;border-radius:10px;padding:10px 18px;font-weight:500;text-decoration:none;display:inline-block}
+.btn:hover{border-color:var(--g);color:var(--gd)}
+.btn.p{background:var(--g);border-color:var(--g);color:#0d0d0d;font-weight:700}
+.btn.p:hover{background:#e3c35a;color:#0d0d0d}
+.btn.l{padding:16px 30px;font-size:1.1rem;border-radius:14px}
+.btn:disabled{opacity:.45;cursor:not-allowed}
+.box{background:var(--k);color:var(--cream);border:1px solid rgba(212,175,55,.5);border-radius:16px;padding:22px;box-shadow:0 18px 40px -26px rgba(212,175,55,.5)}
+.box p{color:var(--mute);margin:6px 0 0}
+.box .btn{background:var(--k2);color:var(--cream);border-color:#3a331c}
+.box .btn.p{background:var(--g);color:#0d0d0d}
+nav,.appbar{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:18px 0;flex-wrap:wrap}
+.logo{font-weight:600;font-size:1.1rem;display:flex;align-items:center;gap:10px;background:none;border:0;color:#0d0d0d;padding:0}
+.logo i{width:12px;height:12px;border-radius:3px;background:var(--g)}
+.navbtn{display:flex;gap:8px}
+.hero{display:grid;grid-template-columns:1.05fr 1fr;gap:40px;align-items:center;padding:36px 0 48px}
+@media(max-width:860px){.hero{grid-template-columns:1fr}}
+.hero h1{font-size:clamp(2.3rem,6vw,3.9rem);margin-bottom:20px}
+.hero h1 em{font-style:normal;background:linear-gradient(90deg,#b8941f,#d4af37);-webkit-background-clip:text;background-clip:text;color:transparent}
+.hero p{color:#5f5d57;max-width:460px;margin:0 0 28px}
+.pill{color:#5f5d57;font-size:.9rem;margin-bottom:22px}.pill::before{content:"";display:inline-block;width:7px;height:7px;border-radius:50%;background:var(--g);margin-right:9px}
+.cta{display:flex;gap:12px;flex-wrap:wrap}
+.mock{padding:0;overflow:hidden}
+.mock .bar{padding:12px 16px;background:var(--k2);color:var(--mute);font-size:.8rem}
+.mrow{display:grid;grid-template-columns:1.2fr 1fr;gap:10px;padding:11px 16px;border-bottom:1px solid #2a2512;font-size:.9rem}
+.mrow em{font-style:normal;color:var(--g)}
+.trust{display:grid;grid-template-columns:repeat(4,1fr);gap:12px}
+@media(max-width:700px){.trust{grid-template-columns:1fr 1fr}}
+.trust b{display:block;font-size:1.3rem;color:var(--g)}.trust span{color:var(--mute);font-size:.88rem}
+section.s{padding:44px 0}
+section.s h2{font-size:clamp(1.6rem,3.5vw,2.2rem);margin-bottom:10px}
+.lead{color:#5f5d57;margin:0 0 24px;max-width:560px}
+.grid3{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+@media(max-width:760px){.grid3,.grid2{grid-template-columns:1fr}}
+.num{display:grid;place-items:center;width:34px;height:34px;border-radius:50%;background:rgba(212,175,55,.2);color:var(--g);font-weight:600;margin-bottom:10px}
+.box h3{color:var(--cream);font-size:1.1rem}.box h3 span{color:var(--g)}
+.faq{display:grid;gap:10px}
+.faq summary{cursor:pointer;font-weight:500}.faq summary::marker{color:var(--g)}
+footer{padding:28px 0;color:#5f5d57;font-size:.88rem}
+.final{text-align:center;padding:48px 24px}.final h2{margin-bottom:8px}.final p{margin:0 auto 22px}
+/* auth */
+.card{max-width:430px;margin:30px auto 60px}
+.card h2{font-size:1.6rem}
+label.f{display:block;font-size:.85rem;color:var(--mute);margin:14px 0 0}
+input[type=text],input[type=email],input[type=password]{display:block;width:100%;margin-top:6px;background:var(--k2);border:1px solid #3a331c;color:var(--cream);border-radius:10px;padding:11px 12px}
+input:focus{border-color:var(--g)}
+.tabs{display:grid;grid-template-columns:1fr 1fr;gap:6px;margin:16px 0 4px}
+.tabs button[aria-selected=true]{background:var(--g)!important;color:#0d0d0d!important;border-color:var(--g)!important}
+.card .btn.p{width:100%;margin-top:18px;padding:13px}
+.msg{min-height:1.4em;font-size:.88rem;color:var(--bad)!important;margin:10px 0 0!important}
+/* app */
+.pick{text-align:center;padding:48px 20px;margin-top:10px}
+.pick h1{font-size:clamp(1.8rem,4.5vw,2.5rem)}
+.pick p{max-width:480px;margin:10px auto 22px}
+.note{color:var(--g);font-size:.9rem;margin-top:14px;min-height:1.3em}
+.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin:20px 0}
+.stats b{display:block;font-size:1.9rem;color:var(--g);line-height:1}
+.stats span{color:var(--mute);font-size:.85rem}
+.panel{margin-bottom:14px}
+.chips{display:flex;flex-wrap:wrap;gap:8px;margin-top:10px}
+.chip{display:flex;align-items:center;gap:8px;background:var(--k2);border-radius:10px;padding:7px 12px;font-size:.9rem;cursor:pointer}
+input[type=checkbox]{accent-color:var(--g);width:16px;height:16px}
+.row{display:flex;flex-wrap:wrap;gap:10px;align-items:center;margin-top:12px}
+.row input[type=text]{margin:0;flex:1 1 130px;width:auto}
+.tw{overflow:auto;max-height:380px;padding:0}
+table{width:100%;border-collapse:collapse;font-size:.88rem;min-width:520px}
+th,td{text-align:left;padding:9px 14px;border-bottom:1px solid #2a2512;white-space:nowrap}
+th{position:sticky;top:0;background:#241f0e;color:var(--g);font-weight:500}
+td.skip{color:var(--mute)}
+.actions{display:flex;gap:14px;align-items:center;flex-wrap:wrap;margin-top:18px}
+.pbar{flex:1 1 200px;height:10px;border-radius:99px;background:#e4e2db;overflow:hidden}
+.pbar i{display:block;height:100%;width:0;background:var(--g);transition:width .2s}
+#log{color:#5f5d57;font-size:.88rem;margin-top:10px}
+.done{text-align:center;padding:20px 0}
+.hero{position:relative;isolation:isolate}
+.hero::before{content:"";position:absolute;left:-20vw;right:-20vw;top:-40px;height:520px;z-index:-1;pointer-events:none;background:radial-gradient(55% 60% at 72% 30%,rgba(212,175,55,.2),transparent 70%)}
+.box{transition:transform .2s,border-color .2s}
+.grid3 .box:hover,.grid2 .box:hover{transform:translateY(-4px);border-color:var(--g)}
+.btn.p{box-shadow:0 10px 24px -12px rgba(212,175,55,.9);transition:transform .15s}
+.btn.p:hover{transform:translateY(-1px)}
+.mrow em{opacity:0;animation:land .5s forwards}
+.mrow:nth-child(2) em{animation-delay:.4s}.mrow:nth-child(3) em{animation-delay:.8s}.mrow:nth-child(4) em{animation-delay:1.2s}.mrow:nth-child(5) em{animation-delay:1.6s}.mrow:nth-child(6) em{animation-delay:2s}.mrow:nth-child(7) em{animation-delay:2.4s}
+@keyframes land{from{opacity:0;transform:translateX(-10px)}to{opacity:1;transform:none}}
+.rv{opacity:0;transform:translateY(14px);transition:opacity .6s,transform .6s}.rv.in{opacity:1;transform:none}
+.pile{position:relative;height:220px;border-radius:14px;background:repeating-linear-gradient(45deg,rgba(212,175,55,.07) 0 10px,transparent 10px 20px)}
+.pile small{position:absolute;left:14px;top:10px;color:var(--mute);font-size:.78rem}
+.chip2{position:absolute;padding:6px 12px;background:var(--k2);border:1px solid var(--g);border-radius:10px;font-size:.82rem;white-space:nowrap;transform:rotate(var(--r))}
+.bins{display:grid;grid-template-columns:repeat(6,1fr);gap:10px;margin-top:16px}
+@media(max-width:860px){.bins{grid-template-columns:repeat(3,1fr)}}
+.bin{background:var(--k2);border:1px solid #3a331c;border-radius:14px;padding:12px;display:flex;flex-direction:column;font-size:.85rem}
+.bin .cnt{font-size:1.6rem;font-weight:600;color:var(--g);line-height:1.1}
+.bin.hit{animation:hit .35s}
+@keyframes hit{50%{transform:scale(1.06);border-color:var(--g)}}
+.playbar{text-align:center;margin-top:16px}
+#playMsg{color:var(--mute);text-align:center;min-height:1.4em;margin-top:10px}
+.stars{color:var(--g);letter-spacing:2px}
+.rev{display:flex;flex-direction:column;gap:12px}
+.rev blockquote{margin:0;flex:1}
+.rev b{display:inline-grid;place-items:center;width:32px;height:32px;border-radius:50%;background:rgba(212,175,55,.2);color:var(--g);margin-right:10px}
+canvas#fx{position:fixed;inset:0;pointer-events:none;width:100%;height:100%}
+@media(prefers-reduced-motion:reduce){*{animation-duration:.01s!important;animation-delay:0s!important;transition:none!important}}
+/* light cream boxes by default, black only for highlights */
+.box{background:#faf8f1;color:#0d0d0d;border:1px solid #e8dfc0;box-shadow:0 14px 34px -22px rgba(138,109,15,.35)}
+.box p{color:#5f5d57}
+.box h3{color:#0d0d0d}.box h3 span{color:#b8941f}
+.box .btn{background:#fff;color:#0d0d0d;border-color:#d9cfa8}
+.box .btn.p{background:var(--g);color:#0d0d0d;border-color:var(--g)}
+.num,.rev b{background:rgba(212,175,55,.25);color:#8a6d0f}
+.stars{color:#c9a227}
+.stats b{color:#b8941f}.stats span{color:#5f5d57}
+.chip{background:#fff;border:1px solid #e8dfc0}
+.box input[type=text],.box input[type=email],.box input[type=password]{background:#fff;border-color:#d9cfa8;color:#0d0d0d}
+label.f{color:#5f5d57}
+th{background:#f1ead2;color:#8a6d0f}th,td{border-bottom-color:#e8dfc0}td.skip{color:#8a8576}
+.grid3 .box:hover,.grid2 .box:hover{border-color:var(--g);box-shadow:0 18px 40px -18px rgba(212,175,55,.6)}
+.faq summary::marker{color:#b8941f}
+.price{font-size:2.4rem;font-weight:600;letter-spacing:-.03em;margin:8px 0}.price small{font-size:.9rem;font-weight:400;color:#5f5d57}
+.plan{display:flex;flex-direction:column}
+.plan ul{list-style:none;padding:0;margin:14px 0 20px;display:grid;gap:8px;font-size:.92rem;flex:1}
+.plan li::before{content:"◆";color:#b8941f;margin-right:8px;font-size:.7rem}
+.plan .btn{width:100%;text-align:center}
+.plan.hot{background:var(--k);color:var(--cream);border-color:var(--g);box-shadow:0 22px 50px -24px rgba(212,175,55,.7)}
+.plan.hot h3{color:var(--cream)}.plan.hot .price small{color:var(--mute)}.plan.hot li::before{color:var(--g)}.plan.hot .btn.p{background:var(--g)}
+.badge{align-self:flex-start;background:var(--g);color:#0d0d0d;font-size:.72rem;font-weight:700;border-radius:99px;padding:2px 10px;margin-bottom:8px}
+dialog{border:1px solid var(--g);border-radius:18px;padding:28px;max-width:420px;width:calc(100% - 32px);background:var(--k);color:var(--cream)}
+dialog p{color:var(--mute)}dialog::backdrop{background:rgba(0,0,0,.5)}
+#upDlg{max-width:980px;max-height:88vh;overflow:auto;background:#fff;color:#0d0d0d;border-color:var(--g)}
+#upBtn{position:fixed;top:calc(env(safe-area-inset-top,0px) + 12px);right:12px;z-index:60;box-shadow:0 8px 22px -8px rgba(212,175,55,.9)}
+.si nav,.si .appbar{padding-right:110px}
+.bigico{font-size:3rem;line-height:1;margin-bottom:10px}
+.pick{background:radial-gradient(60% 120% at 50% 0%,rgba(212,175,55,.28),transparent 65%),var(--k)}
+.meters{display:grid;grid-template-columns:repeat(2,1fr);gap:12px;max-width:520px;margin:22px auto 0;text-align:left}
+.meter{background:var(--k2);border:1px solid #3a331c;border-radius:12px;padding:12px 14px;font-size:.85rem;color:var(--mute)}
+.meter b{display:block;color:var(--cream);font-size:1.15rem}
+.meter i{display:block;height:6px;border-radius:99px;background:#2c2c2c;margin-top:8px;overflow:hidden}
+.meter u{display:block;height:100%;background:var(--g);text-decoration:none}
+.sbar{display:flex;height:14px;border-radius:99px;overflow:hidden;background:#e4e2db;margin-top:12px}
+.sbar i{display:block;height:100%}
+.legend{display:flex;flex-wrap:wrap;gap:6px 16px;margin-top:12px;font-size:.85rem;color:#5f5d57}
+.legend i{display:inline-block;width:10px;height:10px;border-radius:3px;margin-right:6px}
+#bigFiles{margin-top:10px;font-size:.88rem;color:#5f5d57}
+.tag{display:inline-block;padding:2px 10px;border-radius:99px;font-size:.8rem;background:rgba(212,175,55,.2);color:#6b520a}
+#pickBox.drag{outline:2px dashed var(--g);outline-offset:-10px}
+.stats .box{border-top:3px solid var(--g)}
+/* CLEAN PASS: flatter, calmer, more space */
+.wrap{max-width:980px}
+section.s{padding:68px 0}
+section.s h2{font-size:clamp(1.7rem,3.4vw,2.1rem);margin-bottom:8px}
+.lead{margin-bottom:34px}
+.grid3,.grid2{gap:20px}
+.box{background:#fff;border:1px solid #eae6d6;box-shadow:none;padding:26px;border-radius:14px}
+.mock,.trust,.final,.pick,#demo .box,.card{background:var(--k);border-color:var(--k);box-shadow:none}
+.plan.hot{box-shadow:none;border-color:var(--g)}
+.grid3 .box:hover,.grid2 .box:hover{transform:none;box-shadow:none;border-color:var(--g)}
+.plan.hot:hover{border-color:var(--g)}
+.hero::before{display:none}
+.hero{padding:48px 0 64px}
+.hero h1{margin-bottom:18px}
+.pill::before,.bigico,.box h3 span{display:none}
+.pill{margin-bottom:18px}
+.btn.p,#upBtn{box-shadow:none}
+.btn.p:hover{transform:none}
+.pick{background:var(--k);padding:56px 24px}
+.stats .box{border-top:1px solid #eae6d6}
+.stats b{color:#0d0d0d}
+.num{background:none;border:1px solid var(--g);color:#8a6d0f;width:30px;height:30px;font-size:.9rem}
+.plan li::before{content:"";display:inline-block;width:6px;height:6px;border-radius:50%;background:var(--g);margin-right:10px;vertical-align:middle;font-size:0}
+.faq{gap:0}
+.faq details.box{background:none;border:0;border-bottom:1px solid #eae6d6;border-radius:0;padding:18px 0}
+.tw{border-radius:14px}
+th{background:#faf8f1}
+.panel{margin-bottom:16px}
+.mrow{padding:13px 18px}
+.trust{padding:24px 28px}
+footer{padding:40px 0;border-top:1px solid #eae6d6}
+.final{padding:64px 24px}
+.bar2 input,.bar2 select{background:#fff;border:1px solid #eae6d6;color:#0d0d0d;border-radius:10px;padding:11px 12px;font:inherit;margin:0}
+.bar2 input:focus,.bar2 select:focus{border-color:var(--g);outline:none}
+.chip input[type=number]{width:64px;background:#fff;border:1px solid #eae6d6;border-radius:8px;padding:4px 6px;color:#0d0d0d;font:inherit}
+/* CLEANER PASS: borderless fills, quieter details */
+body{line-height:1.65}
+.box{background:#faf9f5;border:0;border-radius:12px;padding:28px}
+.mock,.final,.pick,#demo .box,.card{border:0;border-radius:12px}
+.plan.hot{border:1px solid var(--g)}
+.card{padding:32px}
+.trust{background:none;border:0;padding:8px 0;gap:0;color:#0d0d0d}
+.trust>div{padding:0 22px;border-left:1px solid #eae6d6}
+.trust>div:first-child{border-left:0;padding-left:0}
+.trust b{color:#0d0d0d;font-size:1.25rem}.trust span{color:#5f5d57}
+.pill{display:none}
+.hero h1 em{background:none;-webkit-text-fill-color:#b8941f;color:#b8941f}
+.btn{border-radius:8px;border-color:#d9d4c0}
+.box .btn{border-color:#e4dfcc}
+.pick .btn,.card .btn,#demo .box .btn{border-color:#2c2c2c}
+.chip{background:#fff;border:1px solid #eee9d6;border-radius:8px}
+.tag{background:none;border:1px solid #e6dcae;color:#6b520a;padding:1px 9px}
+.tw{border:1px solid #eee9d6;background:#fff}
+th{background:#fff;border-bottom:1px solid #eee9d6}th,td{border-bottom-color:#f3f0e4}
+.sbar{height:8px}
+.meter{border:0}
+.mrow:last-child{border:0}
+.grid3 .box:hover,.grid2 .box:hover{border-color:transparent;background:#f5f2e6}
+.plan.hot:hover{background:var(--k);border-color:var(--g)}
+.faq details.box{background:none;border:0;border-bottom:1px solid #eee9d6;border-radius:0;padding:18px 0}
+.mock,.tw{padding:0}
+/* NICER PASS: refined details */
+body{-webkit-font-smoothing:antialiased}
+::selection{background:rgba(212,175,55,.35)}
+.hero{background:radial-gradient(70% 90% at 88% 8%,rgba(212,175,55,.11),transparent 65%)}
+.hero h1{letter-spacing:-.035em}
+section.s h2::after{content:"";display:block;width:36px;height:3px;border-radius:3px;background:var(--g);margin-top:12px}
+.final h2::after{margin-left:auto;margin-right:auto}
+.box{transition:background .2s,border-color .2s,box-shadow .25s}
+.grid3 .box:hover,.grid2 .box:hover{box-shadow:0 16px 32px -22px rgba(138,109,15,.4)}
+.btn{transition:background .15s,border-color .15s,color .15s,transform .15s}
+.btn.p{background:linear-gradient(180deg,#e3c04f,#d4af37);box-shadow:inset 0 1px 0 rgba(255,255,255,.4),0 6px 16px -8px rgba(184,148,31,.7)}
+.btn.p:hover{background:linear-gradient(180deg,#ebcb64,#dcb843);transform:translateY(-1px)}
+.btn:active{transform:none}
+.logo i{border-radius:4px;box-shadow:0 0 0 3px rgba(212,175,55,.22)}
+.mock{box-shadow:0 32px 60px -36px rgba(0,0,0,.5)}
+.pick{background:radial-gradient(70% 140% at 50% 0%,rgba(212,175,55,.2),transparent 62%),var(--k)}
+.pick h1{font-size:clamp(2rem,5vw,2.8rem);letter-spacing:-.03em}
+.num{background:var(--g);border:0;color:#0d0d0d}
+.plan.hot{box-shadow:0 26px 50px -32px rgba(212,175,55,.6)}
+.price{letter-spacing:-.04em}
+.stats b{font-size:2.1rem;letter-spacing:-.03em}
+tbody tr:hover td{background:#faf8ee}
+th:first-child,td:first-child{padding-left:18px}
+.meter u,.pbar i{background:linear-gradient(90deg,#b8941f,#e3c35a)}
+.rev blockquote{line-height:1.7}
+.chip:focus-within{border-color:var(--g)}
+.done h2{font-size:1.6rem}
+footer{text-align:center}
+/* ALL WHITE, except the Get started banner */
+.box,.mock,#demo .box,.pick,.card,.plan.hot,dialog{background:#fff;color:#0d0d0d;border:1px solid #eee9d6;box-shadow:none}
+.plan.hot{border-color:var(--g)}
+.plan.hot:hover{background:#fff}
+.plan.hot h3,.pick h1{color:#0d0d0d}
+.plan.hot .price small{color:#5f5d57}
+.mock p,#demo .box p,.pick p,.card p,dialog p,.pile small,#playMsg{color:#5f5d57}
+.mock .bar{background:#faf9f5;color:#5f5d57}
+.mrow{border-bottom-color:#f3f0e4}.mrow em{color:#8a6d0f}
+.chip2{background:#fff;color:#0d0d0d}
+.bin{background:#faf9f5;border-color:#eee9d6;color:#0d0d0d}
+#demo .box .btn,.pick .btn,.card .btn{background:#fff;color:#0d0d0d;border-color:#d9d4c0}
+#demo .box .btn.p,.pick .btn.p,.card .btn.p{background:linear-gradient(180deg,#e3c04f,#d4af37);border-color:var(--g)}
+.meter{background:#faf9f5;color:#5f5d57}.meter b{color:#0d0d0d}.meter i{background:#eee9d6}
+.card label.f{color:#5f5d57}
+.card input[type=text],.card input[type=email],.card input[type=password]{background:#fff;border-color:#d9d4c0;color:#0d0d0d}
+.msg{color:#b3261e!important}
+.note{color:#8a6d0f}
+.trust{background:none;border:0}
+.final{background:var(--k);color:var(--cream);border-color:var(--k)}
+.final p{color:var(--mute)}
+.final .btn.p{background:var(--g);color:#0d0d0d;border-color:var(--g)}
+/* white boxes with gold outlines */
+#demo .box,.mock,.trust{border:1px solid var(--g)}
+.bin{background:var(--g);border-color:var(--g);color:#0d0d0d}.bin .cnt{color:#0d0d0d}
+.mock .bar{border-bottom:1px solid var(--g)}
+.mrow{border-bottom:1px solid var(--g)}.mrow:last-child{border:0}
+.trust{background:#fff;border-radius:12px;padding:20px 8px;gap:0}
+.trust>div{padding:6px 20px;border-left:1px solid var(--g)}
+.trust>div:first-child{border-left:0;padding-left:20px}
+.trust b{color:#0d0d0d}.trust span{color:#5f5d57}
+@media(max-width:700px){.trust>div:nth-child(odd){border-left:0}.trust>div:nth-child(n+3){border-top:1px solid var(--g);margin-top:12px;padding-top:18px}}
+/* nicer demo */
+#demo .box{padding:28px;border-radius:18px;box-shadow:0 26px 50px -36px rgba(184,148,31,.55)}
+.pile{height:250px;border:1px dashed rgba(212,175,55,.7);border-radius:14px;background:radial-gradient(circle,rgba(212,175,55,.28) 1px,transparent 1.6px) 0 0/18px 18px,#fdfbf4}
+.pile small{top:12px;left:16px;font-size:.7rem;letter-spacing:.06em;text-transform:uppercase;color:#8a6d0f;font-weight:600}
+.chip2{padding:7px 14px;font-weight:500;box-shadow:0 8px 16px -10px rgba(138,109,15,.6)}
+.bins{gap:12px;margin-top:20px}
+.bin{background:linear-gradient(160deg,#ebcd62,#d4af37);border:0;border-radius:14px;padding:14px 14px 12px;box-shadow:0 12px 22px -16px rgba(138,109,15,.9)}
+.bin b{font-weight:600;font-size:.88rem;color:#0d0d0d}
+.bin .cnt{font-size:2rem;letter-spacing:-.03em;color:#0d0d0d}
+#playGo,#playReset{padding:13px 30px;border-radius:10px;font-size:1rem}
+.playbar{margin-top:22px}
+#playMsg{color:#0d0d0d;font-weight:500}
+.bin{position:relative;margin-top:8px;display:flex;flex-direction:column;gap:6px;padding:16px 14px 12px;border-radius:6px 16px 16px 16px;background:linear-gradient(160deg,rgba(255,255,255,.4),transparent 55%),linear-gradient(160deg,#ebcd62,#d4af37);box-shadow:inset 0 1px 0 rgba(255,255,255,.55),0 14px 22px -16px rgba(138,109,15,.9)}
+.bin::before{content:"";position:absolute;top:-8px;left:0;width:44%;height:10px;border-radius:8px 8px 0 0;background:#ebcd62}
+.bin .ic{width:30px;height:30px;border-radius:50%;background:rgba(255,255,255,.55);display:grid;place-items:center;font-size:.95rem;line-height:1}
+.bin b{font-size:.82rem;font-weight:600;letter-spacing:.01em}
+.bin .cnt{display:inline-block;font-size:2.1rem;line-height:1;font-weight:600;letter-spacing:-.04em}
+.bin.hit .cnt{animation:pop .35s}
+@keyframes pop{50%{transform:scale(1.3)}}
+</style>
+</head>
+<body>
+<noscript><p style="padding:20px;text-align:center">Organizer Pro needs JavaScript to run.</p></noscript>
+
+<div id="v-home"><div class="wrap">
+<nav><button class="logo" data-go="home"><i></i>Organizer Pro</button>
+<div class="navbtn"><button class="btn" id="navIn" data-go="auth" data-tab="in">Sign in</button><button class="btn p" id="navUp" data-go="auth" data-tab="up">Sign up</button></div></nav>
+<header class="hero">
+<div><div class="pill">100% client-side: your files never leave your computer.</div>
+<h1>Your Downloads folder, <em>sorted in one click.</em></h1>
+<p>Choose a folder, preview where each file will go, and sort everything in one click. It all happens on your own drive.</p>
+<div class="cta"><button class="btn p l" data-go="auth" data-tab="up">Create account</button><a class="btn l" href="#how">See how it works</a></div></div>
+<div class="box mock" aria-hidden="true"><div class="bar">Downloads, 6 files</div>
+<div class="mrow"><span>holiday-photo.heic</span><em>Images &amp; Graphics</em></div>
+<div class="mrow"><span>Invoice-0412.pdf</span><em>Invoices</em></div>
+<div class="mrow"><span>quarterly-report.docx</span><em>Documents &amp; Text</em></div>
+<div class="mrow"><span>demo-reel.mp4</span><em>Media &amp; Video</em></div>
+<div class="mrow"><span>site-backup.zip</span><em>Archives &amp; Zips</em></div>
+<div class="mrow"><span>installer.dmg</span><em>System &amp; Installers</em></div></div>
+</header>
+<div class="box trust"><div><b>0 bytes</b><span>uploaded, ever</span></div><div><b>6</b><span>smart folders</span></div><div><b>1 click</b><span>to sort, and to undo</span></div><div><b>Your rules</b><span>for any file name</span></div></div>
+
+<section class="s" id="demo"><h2>See it in action</h2><p class="lead">Press the button and watch a messy folder sort itself.</p>
+<div class="box"><div class="pile" id="pile"><small>Downloads (messy)</small></div><div class="bins" id="bins"></div>
+<div class="playbar"><button class="btn p" id="playGo">Sort the pile</button><button class="btn" id="playReset" hidden>Shuffle again</button></div><div id="playMsg" aria-live="polite"></div></div></section>
+<section class="s" id="how"><h2>How it works</h2><p class="lead">Three steps from messy folder to sorted.</p>
+<div class="grid3">
+<div class="box"><div class="num">1</div><h3>Pick a folder</h3><p>Choose Downloads, Desktop, or any folder. Your browser asks permission first.</p></div>
+<div class="box"><div class="num">2</div><h3>Review the plan</h3><p>See every file and where it will go. Nothing moves until you say so.</p></div>
+<div class="box"><div class="num">3</div><h3>Run the sort</h3><p>Watch the progress bar as files move into place.</p></div></div></section>
+
+<section class="s" id="features"><h2>Features</h2><p class="lead">Simple by default, flexible when needed.</p>
+<div class="grid2">
+<div class="box"><h3><span>◆</span> Smart folder routing</h3><p>Files go into six folders based on type: Images, Documents, Media, Code, Archives, and Installers.</p></div>
+<div class="box"><h3><span>◆</span> Custom rules</h3><p>Route files by name, like sending anything with “Invoice” to an Invoices folder.</p></div>
+<div class="box"><h3><span>◆</span> Date folders</h3><p>Group files by month, such as Documents / 2026-November.</p></div>
+<div class="box"><h3><span>◆</span> Overwrite protection</h3><p>Files with the same name get a counter, like image (1).png. Nothing is replaced.</p></div></div></section>
+
+<section class="s" id="privacy"><h2>Privacy</h2><p class="lead">Private by design.</p>
+<div class="box"><p style="margin-top:0">Organizer Pro uses your browser’s File System Access API to read and move files directly on your machine. Nothing is uploaded. It edits real folders, so it needs Chrome, Edge, or Opera on a computer. Safari and Firefox aren’t supported.</p></div></section>
+
+<section class="s" id="pricing"><h2>Pricing</h2><p class="lead">Start free. Upgrade when you want more.</p>
+<div class="grid3">
+<div class="box plan"><h3>Free</h3><div class="price">$0<small> /month</small></div><p style="margin:0">For tidying up now and then.</p><ul><li>1 organizer per day</li><li>1 undo per day</li><li>6 smart folders and custom rules</li></ul><button class="btn" data-go="auth" data-tab="up">Get started</button></div>
+<div class="box plan hot"><span class="badge">Most popular</span><h3>Pro</h3><div class="price">$20<small> /month</small></div><p style="margin:0">For people who sort every week.</p><ul><li>10 organizers per day</li><li>10 undos per day</li><li>Priority email support</li><li>Early access to new features</li></ul><button class="btn p" data-plan="pro">Choose Pro</button></div>
+<div class="box plan"><h3>Max</h3><div class="price">$70<small> /month</small></div><p style="margin:0">For power users and small teams.</p><ul><li>Unlimited organizers</li><li>Unlimited undos</li><li>Shared rules for your team</li><li>Dedicated support</li></ul><button class="btn p" data-plan="max">Choose Max</button></div></div>
+<p style="font-size:.82rem;color:#5f5d57;margin-top:14px">Prices and plan details are placeholders. Pro and Max require payment.</p>
+<dialog id="dlg" aria-label="Checkout"><h2 id="dlgT" style="font-size:1.4rem"></h2><p id="dlgP"></p><button class="btn p" id="dlgX" style="background:var(--g);border-color:var(--g);color:#0d0d0d">Done</button></dialog></section>
+<section class="s" id="reviews"><h2>Reviews</h2><p class="lead">Sample reviews. Swap in real ones before launch.</p>
+<div class="grid3">
+<figure class="box rev" style="margin:0"><div class="stars" role="img" aria-label="5 out of 5">★★★★★</div><blockquote>“My Downloads folder had 900 files. It sorted all of them in under a minute, and the preview meant nothing surprised me.”</blockquote><figcaption><b>M</b>Maya R.</figcaption></figure>
+<figure class="box rev" style="margin:0"><div class="stars" role="img" aria-label="5 out of 5">★★★★★</div><blockquote>“I like that nothing gets uploaded. The undo button is what made me trust it.”</blockquote><figcaption><b>D</b>Daniel K.</figcaption></figure>
+<figure class="box rev" style="margin:0"><div class="stars" role="img" aria-label="5 out of 5">★★★★★</div><blockquote>“Date folders are perfect for my photos. It finally feels like a chore that’s done.”</blockquote><figcaption><b>E</b>Elena V.</figcaption></figure></div></section>
+<section class="s" id="faq"><h2>FAQ</h2><p class="lead">Quick answers before you start.</p>
+<div class="faq">
+<details class="box"><summary>Are my files uploaded anywhere?</summary><p>No. Sorting runs in your browser, and files are read and moved on your own device.</p></details>
+<details class="box"><summary>Can I undo a sort?</summary><p>Yes. Right after sorting, press Undo to move every file back.</p></details>
+<details class="box"><summary>Does it sort files inside subfolders?</summary><p>No. It only sorts the files directly inside the folder you choose.</p></details></div></section>
+
+<section class="s"><div class="box final"><h2>Get started</h2><p>Give your files a place to live.</p><button class="btn p l" data-go="auth" data-tab="up">Get started</button></div></section>
+<footer>Organizer Pro. Your files stay on your computer.</footer>
+</div></div>
+
+<div id="v-auth" hidden><div class="wrap">
+<nav><button class="logo" data-go="home"><i></i>Organizer Pro</button><button class="btn" data-go="home">Back</button></nav>
+<div class="box card">
+<h2 id="aTitle">Welcome back</h2><p id="aSub">Sign in to open your organizer.</p>
+<div class="tabs"><button class="btn" id="tIn" aria-selected="true">Sign in</button><button class="btn" id="tUp" aria-selected="false">Sign up</button></div>
+<form id="f-auth" novalidate>
+<label class="f" id="nameRow" hidden>Name<input type="text" id="aName" autocomplete="name"></label>
+<label class="f">Email<input type="email" id="aEmail" autocomplete="email"></label>
+<label class="f">Password<input type="password" id="aPass" autocomplete="current-password"></label>
+<p class="msg" id="aMsg" role="alert"></p>
+<button class="btn p" id="aGo" type="submit">Sign in</button>
+</form>
+<p style="font-size:.8rem">Demo accounts are stored only in this browser.</p>
+</div></div></div>
+
+<div id="v-app" hidden><div class="wrap">
+<div class="appbar"><button class="logo" data-go="app"><i></i>Organizer Pro</button><div style="display:flex;gap:10px;align-items:center;flex-wrap:wrap"><span id="uName"></span> <button class="btn" id="out">Sign out</button></div></div>
+<section class="box pick" id="pickBox"><div class="bigico">📂</div><h1 id="hi">Ready to tidy up?</h1>
+<p>Select a folder. You’ll review the plan before anything moves.</p>
+<button class="btn p l" id="pick">Select folder</button>
+<div style="margin-top:14px"><button class="btn" id="demoBtn">Try with sample files</button></div>
+<div class="note" id="note"></div><p style="margin:14px 0 0;font-size:.85rem">or drag a folder onto this box</p><div class="meters" id="meters"></div></section>
+<section id="work" hidden>
+<div class="stats"><div class="box"><b id="sFiles">0</b><span>Files found</span></div><div class="box"><b id="sDirs">0</b><span>Folders found</span></div><div class="box"><b id="sSize">0 MB</b><span>Total size</span></div></div>
+<div class="box panel"><h3>Where the space goes</h3><div class="sbar" id="sbar"></div><div class="legend" id="legend"></div><div id="bigFiles"></div></div>
+<div class="box panel"><h3>Sorting folders</h3><div class="chips" id="cats"></div>
+<div class="row"><span style="font-size:.85rem;color:#5f5d57">Presets:</span><button class="btn" data-pre="all">All</button><button class="btn" data-pre="Documents &amp; Text">Documents</button><button class="btn" data-pre="Images &amp; Graphics">Images</button><button class="btn" data-pre="Media &amp; Video">Media</button></div>
+<div class="row"><label class="chip"><input type="checkbox" id="byDate">Group by modified month</label><label class="chip">Only files older than <input type="number" id="minAge" min="0" value="0" aria-label="Minimum age in days"> days</label><label class="chip">Only files larger than <input type="number" id="minSize" min="0" value="0" aria-label="Minimum size in MB"> MB</label></div></div>
+<div class="box panel"><h3>Custom rules</h3><p>Files whose name contains the text go to that folder. Rules run first.</p>
+<div class="row"><input type="text" id="rKey" placeholder="Name contains (e.g. Invoice)" aria-label="Name contains"><input type="text" id="rDir" placeholder="Folder (e.g. Invoices)" aria-label="Folder name"><button class="btn" id="rAdd">Add rule</button></div><div id="rules"></div></div>
+<div class="box panel"><h3>Your plan</h3><div class="chips" id="plan"></div></div>
+<div class="row bar2" style="margin:0 0 12px"><input type="text" id="q" placeholder="Search files" aria-label="Search files" style="flex:2 1 200px"><select id="srt" aria-label="Sort by"><option value="name">Name</option><option value="size">Size, largest first</option><option value="date">Newest first</option></select></div>
+<div class="box tw"><table><thead><tr><th style="width:38px"><input type="checkbox" id="chkAll" checked aria-label="Include all files"></th><th>File name</th><th>Type</th><th>Size</th><th>Goes to</th></tr></thead><tbody id="rows"></tbody></table></div>
+<div class="actions"><button class="btn p" id="run">Sort files</button><div class="pbar" role="progressbar" aria-label="Progress"><i id="prog"></i></div><button class="btn" id="again">Choose another folder</button></div>
+<div id="log" aria-live="polite"></div>
+<div class="done" id="done" hidden><h2 id="doneMsg"></h2><p id="doneSum" style="color:#5f5d57;margin:8px 0 0"></p><button class="btn" id="undo" hidden style="margin-top:14px">Undo this sort</button></div>
+</section></div></div>
+
+<button class="btn p" id="upBtn" hidden>Upgrade</button>
+<dialog id="upDlg" aria-label="Upgrade"><div style="display:flex;justify-content:space-between;align-items:center;gap:12px;margin-bottom:14px"><h2 style="font-size:1.5rem">Upgrade your plan</h2><button class="btn" id="upX">Close</button></div><div id="upBody"></div></dialog>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.js"></script>
+<script>
+const $=id=>document.getElementById(id);
+const LS={get(k){try{return localStorage.getItem(k)}catch(e){return null}},set(k,v){try{localStorage.setItem(k,v)}catch(e){}},del(k){try{localStorage.removeItem(k)}catch(e){}}};
+const esc=s=>String(s).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+/* Paste your Supabase details here (Project Settings > API). The anon key is meant to be public. */
+const SUPABASE_URL="https://bosqstznqmbcconyacxy.supabase.co",SUPABASE_KEY="sb_publishable_M_jeGpsshIDbpa-x7Bz4Nw_zrJ04xij";
+const sb=(SUPABASE_URL&&window.supabase)?window.supabase.createClient(SUPABASE_URL,SUPABASE_KEY):null;
+function adopt(user){const email=user.email.toLowerCase(),u=users();u[email]={...(u[email]||{}),name:(user.user_metadata&&user.user_metadata.name)||email.split("@")[0],email};delete u[email].hash;delete u[email].salt;LS.set("op_users",JSON.stringify(u));session={email};LS.set("op_session",JSON.stringify(session))}
+const users=()=>{try{return JSON.parse(LS.get("op_users")||"{}")}catch(e){return{}}};
+const rnd=n=>[...crypto.getRandomValues(new Uint8Array(n))].map(x=>x.toString(16).padStart(2,"0")).join("");
+async function hp(pw,salt){const b=await crypto.subtle.digest("SHA-256",new TextEncoder().encode(salt+pw));return[...new Uint8Array(b)].map(x=>x.toString(16).padStart(2,"0")).join("")}
+let session=null;
+try{session=JSON.parse(LS.get("op_session")||"null")}catch(e){}
+const me=()=>session&&users()[session.email]||null;
+function go(v){
+  const si=!!me();if(v==="app"&&!si)v="auth";if(v==="auth"&&si)v="app";
+  $("navIn").hidden=si;$("upBtn").hidden=!si;document.body.classList.toggle("si",si);$("navUp").textContent=si?"Open organizer":"Sign up";
+  for(const n of["home","auth","app"])$("v-"+n).hidden=n!==v;
+  if(v==="app")enter();scrollTo(0,0);
+}
+let mode="in";
+function setTab(t){mode=t;const up=t==="up";
+  $("tIn").setAttribute("aria-selected",!up);$("tUp").setAttribute("aria-selected",up);
+  $("nameRow").hidden=!up;$("aGo").textContent=up?"Create account":"Sign in";
+  $("aTitle").textContent=up?"Create your account":"Welcome back";
+  $("aSub").textContent=up?"Sign up to open your organizer.":"Sign in to open your organizer.";$("aMsg").textContent=""}
+$("tIn").onclick=()=>setTab("in");$("tUp").onclick=()=>setTab("up");
+document.addEventListener("click",e=>{const b=e.target.closest("[data-go]");if(!b)return;if(b.dataset.tab)setTab(b.dataset.tab);go(b.dataset.go)});
+$("f-auth").addEventListener("submit",async e=>{
+  e.preventDefault();const m=$("aMsg");m.textContent="";m.style.removeProperty("color");
+  if(!sb)return m.textContent="Sign-in isn’t connected yet. Add your Supabase details to the page.";
+  const email=$("aEmail").value.trim().toLowerCase(),pw=$("aPass").value,name=$("aName").value.trim();
+  if(!/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(email))return m.textContent="Enter a valid email address.";
+  if(mode==="up"){
+    if(!name)return m.textContent="Enter your name.";
+    if(pw.length<8)return m.textContent="Use at least 8 characters for your password.";
+  }
+  $("aGo").disabled=true;
+  try{
+    let r;
+    if(mode==="up"){
+      r=await sb.auth.signUp({email,password:pw,options:{data:{name}}});if(r.error)throw r.error;
+      fetch("/api/signup",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({name,email})}).catch(()=>{});
+      if(!r.data.session){m.style.setProperty("color","#8a6d0f","important");m.textContent="Check your email to confirm your account, then sign in.";return}
+    }else{r=await sb.auth.signInWithPassword({email,password:pw});if(r.error)throw r.error}
+    adopt(r.data.session.user);go("app");setTimeout(()=>$("upBtn").click(),250);
+  }catch(err){m.textContent=err.message||"Something went wrong. Try again."}
+  finally{$("aGo").disabled=false}
+});
+$("out").onclick=()=>{if(sb)sb.auth.signOut();LS.del("op_session");session=null;files=[];moved=[];$("work").hidden=true;$("pickBox").hidden=false;setTab("in");go("home")};
+
+const CATS={"Images & Graphics":"jpg jpeg png gif webp svg bmp heic","Documents & Text":"pdf docx xlsx pptx txt rtf csv pages","Media & Video":"mp3 wav mp4 mov avi mkv flac","Developer & Code":"html css js json py xml sh sql","Archives & Zips":"zip rar tar gz 7z","System & Installers":"dmg exe pkg msi iso"};
+const EXT={};for(const[k,v]of Object.entries(CATS))v.split(" ").forEach(e=>EXT[e]=k);
+const MON=["January","February","March","April","May","June","July","August","September","October","November","December"];
+let dir=null,files=[],rules=[],on=new Set(Object.keys(CATS)),demo=false,busy=false,moved=[];
+const fmt=b=>b>=1e9?(b/1e9).toFixed(2)+" GB":b>=1e6?(b/1e6).toFixed(1)+" MB":Math.max(1,Math.round(b/1e3))+" KB";
+const extOf=n=>{const i=n.lastIndexOf(".");return i>0?n.slice(i+1).toLowerCase():""};
+function enter(){
+  const u=me();$("uName").textContent=u.name+" · "+(u.plan||"free").toUpperCase();$("hi").textContent="Ready to tidy up, "+u.name.split(" ")[0]+"?";renderMeters();
+  if(!window.showDirectoryPicker){$("note").textContent="Your browser can’t sort folders. Use Chrome, Edge, or Opera on a computer. You can still try the sample files.";$("pick").disabled=true}
+  if(!files.length&&!moved.length){$("work").hidden=true;$("pickBox").hidden=false}
+}
+const dest=f=>f.skip?null:dest0(f);
+function dest0(f){
+  const low=f.name.toLowerCase();let d=null;
+  for(const r of rules)if(low.includes(r.key.toLowerCase())){d=r.dir;break}
+  if(!d){const c=EXT[extOf(f.name)];if(c&&on.has(c))d=c}
+  if(!d)return null;if(f.size<(+$("minSize").value||0)*1e6||Date.now()-f.modified<(+$("minAge").value||0)*864e5)return null;
+  if($("byDate").checked){const t=new Date(f.modified);d+="/"+t.getFullYear()+"-"+MON[t.getMonth()]}
+  return d;
+}
+function render(){
+  $("rows").innerHTML=view().map(f=>{const d=dest(f),b=dest0(f);return`<tr><td><input type="checkbox" data-i="${files.indexOf(f)}" aria-label="Include ${esc(f.name)}" ${d?"checked":""} ${b?"":"disabled"}></td><td>${esc(f.name)}</td><td>${esc(extOf(f.name)||"none")}</td><td>${fmt(f.size)}</td><td class="${d?"":"skip"}">${d?`<span class="tag">${ICO[d.split("/")[0]]||"📁"} ${esc(d)}</span>`:"Stays in place"}</td></tr>`}).join("")||`<tr><td colspan="5" class="skip">No loose files in this folder.</td></tr>`;
+  const n=files.filter(dest).length;renderPlan();savePrefs();$("run").textContent=n?`Sort ${n} file${n>1?"s":""}`:"Sort files";
+}
+function renderRules(){$("rules").innerHTML=rules.map((r,i)=>`<div style="margin-top:8px;font-size:.9rem">Name contains “${esc(r.key)}” → ${esc(r.dir)} <button class="btn" data-i="${i}" aria-label="Remove rule" style="padding:2px 10px">×</button></div>`).join("")}
+$("cats").innerHTML=Object.keys(CATS).map(k=>`<label class="chip"><input type="checkbox" data-c="${k}" checked>${k}</label>`).join("");
+function show(){
+  $("pickBox").hidden=true;$("work").hidden=false;
+  $("sFiles").textContent=files.length;$("sDirs").textContent=files.dirs;$("sSize").textContent=fmt(files.reduce((a,f)=>a+f.size,0));
+  $("prog").style.width="0";$("log").textContent="";$("done").hidden=true;render();renderSpace();renderDupes();
+}
+async function scan(){
+  files=[];let dirs=0;
+  for await(const[name,h]of dir.entries()){if(h.kind==="directory"){dirs++;continue}const f=await h.getFile();files.push({name,size:f.size,modified:f.lastModified,handle:h})}
+  files.dirs=dirs;files.sort((a,b)=>a.name.localeCompare(b.name));show();
+}
+$("pick").onclick=async()=>{
+  $("note").textContent="";
+  try{dir=await window.showDirectoryPicker({mode:"readwrite"});demo=false;moved=[];await scan()}
+  catch(e){if(e.name==="AbortError")return;
+    $("note").textContent=e.name==="SecurityError"?"The browser blocked folder access in this view. Open the page in its own Chrome or Edge tab and try again.":"Couldn’t open that folder: "+e.message}
+};
+$("demoBtn").onclick=()=>{
+  demo=true;dir=null;moved=[];const now=Date.now(),d=864e5;
+  files=[["holiday.jpg",3e6,5],["Invoice-0412.pdf",2e5,40],["notes.txt",4e3,2],["song.mp3",6e6,90],["site.zip",2e7,12],["app.js",9e3,1],["setup.exe",8e7,70],["report.docx",9e4,33],["movie.mkv",9e8,150],["data.csv",5e4,8],["readme",1e3,3]].map(([name,size,ago])=>({name,size,modified:now-ago*d}));
+  files.dirs=2;show();
+};
+$("again").onclick=()=>{if(!busy){$("work").hidden=true;$("pickBox").hidden=false}};
+$("cats").onchange=e=>{const c=e.target.dataset.c;e.target.checked?on.add(c):on.delete(c);render()};
+$("byDate").onchange=render;
+$("rAdd").onclick=()=>{const key=$("rKey").value.trim(),d=$("rDir").value.trim().replace(/[\\/:*?"<>|]/g,"");if(!key||!d)return;rules.push({key,dir:d});$("rKey").value=$("rDir").value="";renderRules();render()};
+$("rules").onclick=e=>{const b=e.target.closest("button");if(b){rules.splice(+b.dataset.i,1);renderRules();render()}};
+async function uniq(t,name){
+  const i=name.lastIndexOf("."),base=i>0?name.slice(0,i):name,ext=i>0?name.slice(i):"";let n=name,c=0;
+  while(true){try{await t.getFileHandle(n)}catch(e){return n}c++;n=`${base} (${c})${ext}`}
+}
+async function mv(h,from,to,name,fromName){
+  try{await h.move(to,name);return}catch(e){}
+  const file=await h.getFile(),nh=await to.getFileHandle(name,{create:true}),w=await nh.createWritable();
+  await file.stream().pipeTo(w);await from.removeEntry(fromName);
+}
+$("run").onclick=async()=>{
+  if(busy)return;const todo=files.map(f=>({f,d:dest(f)})).filter(x=>x.d);
+  if(!todo.length){$("log").textContent="Nothing to sort with the current settings.";return}
+  if(left("s")<=0){$("log").textContent=limitMsg("s");return}
+  busy=true;$("run").disabled=true;$("done").hidden=true;let ok=0,fail=0;moved=[];
+  for(let i=0;i<todo.length;i++){
+    const{f,d}=todo[i];
+    try{
+      if(demo)await new Promise(r=>setTimeout(r,160));
+      else{let t=dir;for(const p of d.split("/"))t=await t.getDirectoryHandle(p,{create:true});
+        const name=await uniq(t,f.name);await mv(f.handle,dir,t,name,f.name);moved.push({orig:f.name,path:d,name})}
+      ok++;
+    }catch(e){fail++;$("log").textContent=`Couldn’t move ${f.name}: ${e.message}`}
+    $("prog").style.width=Math.round((i+1)/todo.length*100)+"%";
+  }
+  busy=false;$("run").disabled=false;
+  $("doneMsg").textContent=`Sorted ${ok} file${ok===1?"":"s"}${fail?`, ${fail} skipped`:""}${demo?" (sample run, nothing on your drive changed)":""}`;
+  {const c={};todo.forEach(x=>{const k=x.d.split("/")[0];c[k]=(c[k]||0)+1});$("doneSum").textContent=fail?"":Object.entries(c).map(([k,v])=>`${k}: ${v}`).join(" · ")}
+  $("done").hidden=false;$("undo").hidden=demo||!ok;if(ok)confetti();
+  if(ok&&!demo)bump("s");{const L=left("s");if(!fail&&L!==Infinity)$("log").textContent=`${Math.max(L,0)} organizer${L===1?"":"s"} left today.`}$("undo").disabled=false;
+  if(!demo)files=files.filter(f=>!todo.some(t=>t.f===f));render();
+};
+$("undo").onclick=async()=>{
+  if(busy||!moved.length)return;if(left("u")<=0){$("log").textContent=limitMsg("u");return}busy=true;$("undo").disabled=true;
+  for(const m of moved.slice().reverse()){
+    try{let t=dir;for(const p of m.path.split("/"))t=await t.getDirectoryHandle(p);
+      const h=await t.getFileHandle(m.name),name=await uniq(dir,m.orig);await mv(h,t,dir,name,m.name)}catch(e){}
+  }
+  bump("u");moved=[];busy=false;await scan();{const L=left("u");$("log").textContent="Undone. Your files are back where they started."+(L===Infinity?"":` ${Math.max(L,0)} undo${L===1?"":"s"} left today.`)}
+};
+(function(){
+const F=[["holiday.jpg",0],["logo.svg",0],["scan.png",0],["report.pdf",1],["notes.txt",1],["budget.xlsx",1],["song.mp3",2],["clip.mp4",2],["app.js",3],["style.css",3],["site.zip",4],["backup.7z",4],["setup.exe",5],["mac.dmg",5]];
+const N=["Images","Documents","Media","Code","Archives","Installers"],pile=$("pile"),bins=$("bins");
+bins.innerHTML=N.map(n=>`<div class="bin"><span class="ic">📁</span><b>${n}</b><span class="cnt">0</span></div>`).join("");
+pile.insertAdjacentHTML("beforeend",F.map(([n],i)=>`<span class="chip2" style="left:${4+(i*37)%58}%;top:${16+(i*53)%62}%;--r:${((i*29)%21)-10}deg">${n}</span>`).join(""));
+const chips=[...pile.querySelectorAll(".chip2")],cnts=[...bins.querySelectorAll(".cnt")],boxes=[...bins.children];let run=false,tm=[];
+$("playGo").onclick=()=>{
+ if(run)return;run=true;$("playGo").disabled=true;
+ chips.forEach((el,i)=>{const a=el.getBoundingClientRect(),k=F[i][1],b=boxes[k].getBoundingClientRect(),d=i*70;
+  el.style.transition=`transform .7s ${d}ms cubic-bezier(.55,0,.2,1),opacity .25s ${d+470}ms`;
+  el.style.transform=`translate(${b.left+b.width/2-(a.left+a.width/2)}px,${b.top+b.height/2-(a.top+a.height/2)}px) scale(.35)`;el.style.opacity="0";
+  tm.push(setTimeout(()=>{cnts[k].textContent=+cnts[k].textContent+1;boxes[k].classList.remove("hit");void boxes[k].offsetWidth;boxes[k].classList.add("hit")},d+650))});
+ tm.push(setTimeout(()=>{run=false;$("playReset").hidden=false;$("playGo").hidden=true;$("playMsg").textContent="14 files sorted into 6 folders. That’s the whole idea."},F.length*70+900));
+};
+$("playReset").onclick=()=>{if(run)return;tm.forEach(clearTimeout);tm=[];chips.forEach(el=>{el.style.transition="transform .5s,opacity .4s";el.style.transform="";el.style.opacity="1"});cnts.forEach(c=>c.textContent="0");$("playMsg").textContent="";$("playReset").hidden=true;$("playGo").hidden=false;$("playGo").disabled=false};
+if("IntersectionObserver"in window&&!matchMedia("(prefers-reduced-motion:reduce)").matches){const io=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting){e.target.classList.add("in");io.unobserve(e.target)}}),{threshold:.1});document.querySelectorAll("#v-home section.s .box").forEach(el=>{el.classList.add("rv");io.observe(el)})}
+})();
+function confetti(){
+ if(matchMedia("(prefers-reduced-motion:reduce)").matches)return;
+ let c=$("fx");if(!c){c=document.createElement("canvas");c.id="fx";c.setAttribute("aria-hidden","true");document.body.appendChild(c)}
+ const x=c.getContext("2d");c.width=innerWidth;c.height=innerHeight;const cols=["#d4af37","#e3c35a","#b8941f","#f1e2a6","#0d0d0d"];
+ const p=Array.from({length:130},()=>({x:innerWidth/2,y:innerHeight*.6,vx:(Math.random()-.5)*14,vy:-Math.random()*15-4,s:Math.random()*7+3,c:cols[Math.random()*5|0],r:Math.random()*6}));
+ let t=0;(function f(){x.clearRect(0,0,c.width,c.height);p.forEach(q=>{q.x+=q.vx;q.y+=q.vy;q.vy+=.35;q.r+=.2;x.save();x.translate(q.x,q.y);x.rotate(q.r);x.fillStyle=q.c;x.fillRect(-q.s/2,-q.s/2,q.s,q.s*.6);x.restore()});if(++t<130)requestAnimationFrame(f);else x.clearRect(0,0,c.width,c.height)})();
+}
+const LIM={free:1,pro:10,max:Infinity};
+const day=()=>{const d=new Date();return d.getFullYear()+"-"+(d.getMonth()+1)+"-"+d.getDate()};
+function usage(){const x=users()[session.email].usage;return x&&x.d===day()?x:{d:day(),s:0,u:0}}
+function left(k){return LIM[me().plan||"free"]-usage()[k]}
+function bump(k){const all=users(),x=usage();x[k]++;all[session.email].usage=x;LS.set("op_users",JSON.stringify(all));renderMeters()}
+function limitMsg(k){const p=me().plan||"free",n=LIM[p];return `You’ve used your ${n} ${k==="s"?"organizer":"undo"}${n>1?"s":""} for today on the ${p[0].toUpperCase()+p.slice(1)} plan. Upgrade for more.`}
+/* Paste your Stripe (or other) payment links here to take real payments. */
+const PAY={pro:"https://www.patreon.com/checkout/FileOrganizer?rid=30008519",max:"https://www.patreon.com/checkout/FileOrganizer?rid=30008522"};
+document.addEventListener("click",e=>{
+ const b=e.target.closest("[data-plan]");if(!b)return;const p=b.dataset.plan,name=p[0].toUpperCase()+p.slice(1);
+ 
+ if(!me()){setTab("up");go("auth");return}
+ if(PAY[p]){const w=window.open(PAY[p],"_blank");if(w){w.opener=null;return}
+  $("dlgT").textContent="Continue on Patreon";$("dlgP").innerHTML='Your browser blocked the new tab. <a href="'+PAY[p]+'" target="_blank" rel="noopener" style="color:#8a6d0f;font-weight:600">Tap here to open Patreon</a>, or copy this address:<br><span style="word-break:break-all">'+PAY[p]+'</span>';$("dlg").showModal();return}
+ 
+ $("dlgT").textContent="Checkout isn’t connected yet";$("dlgP").textContent=name+" requires payment, and this site’s payment link hasn’t been added yet. Your plan was not changed.";
+ $("dlg").showModal();
+});
+$("dlgX").onclick=()=>$("dlg").close();
+document.body.appendChild($("dlg"));
+$("dlg").addEventListener("close",()=>{const u=me();if(u)$("uName").textContent=u.name+" · "+(u.plan||"free").toUpperCase()});
+$("upBtn").onclick=()=>{
+ const g=document.querySelector("#pricing .grid3").cloneNode(true),cur=me().plan||"free";
+ g.querySelectorAll(".rv").forEach(e=>e.classList.remove("rv","in"));
+ g.querySelectorAll(".plan").forEach(c=>{const b=c.querySelector("button"),p=b.dataset.plan||"free";
+  if(p===cur||p==="free"){b.textContent=p===cur?"Current plan":"Free plan";b.disabled=true;b.removeAttribute("data-plan");b.removeAttribute("data-go")}});
+ $("upBody").replaceChildren(g);$("upDlg").showModal();
+};
+$("upX").onclick=()=>$("upDlg").close();
+function renderDupes(){const m={};files.forEach(f=>{const i=f.name.lastIndexOf("."),b=(i>0?f.name.slice(0,i):f.name).replace(/ \(\d+\)$/,"").toLowerCase(),k=b+"|"+extOf(f.name)+"|"+f.size;m[k]=(m[k]||0)+1});
+ const n=Object.values(m).filter(v=>v>1).reduce((a,v)=>a+v-1,0);
+ if(n)$("bigFiles").textContent+=($("bigFiles").textContent?" · ":"")+n+" possible duplicate"+(n>1?"s":"")}
+function savePrefs(){LS.set("op_prefs",JSON.stringify({rules,off:Object.keys(CATS).filter(c=>!on.has(c)),byDate:$("byDate").checked,age:$("minAge").value,size:$("minSize").value}))}
+function loadPrefs(){try{const p=JSON.parse(LS.get("op_prefs")||"null");if(!p)return;
+ rules=Array.isArray(p.rules)?p.rules.filter(r=>r&&r.key&&r.dir):[];(p.off||[]).forEach(c=>on.delete(c));
+ $("byDate").checked=!!p.byDate;$("minAge").value=p.age||0;$("minSize").value=p.size||0;
+ document.querySelectorAll("#cats input").forEach(i=>{i.checked=on.has(i.dataset.c)});renderRules();render()}catch(e){}}
+$("minAge").oninput=$("minSize").oninput=render;
+document.addEventListener("click",e=>{const b=e.target.closest("[data-pre]");if(!b)return;
+ on=b.dataset.pre==="all"?new Set(Object.keys(CATS)):new Set([b.dataset.pre]);
+ document.querySelectorAll("#cats input").forEach(i=>{i.checked=on.has(i.dataset.c)});render()});
+function view(){const q=$("q").value.trim().toLowerCase(),s=$("srt").value;
+ return files.filter(f=>!q||f.name.toLowerCase().includes(q)).sort((x,y)=>s==="size"?y.size-x.size:s==="date"?y.modified-x.modified:x.name.localeCompare(y.name))}
+function renderPlan(){const m={};files.forEach(f=>{const d=dest(f);if(d){const k=d.split("/")[0];m[k]=(m[k]||0)+1}});
+ const e=Object.entries(m);
+ $("plan").innerHTML=e.length?e.map(([k,v])=>`<span class="tag">${ICO[k]||"📁"} ${esc(k)} · ${v}</span>`).join(""):"<span style='color:#5f5d57;font-size:.9rem'>Nothing selected to move.</span>";
+ const mv=files.filter(dest0);$("chkAll").checked=!!mv.length&&mv.every(f=>!f.skip)}
+$("q").oninput=render;$("srt").onchange=render;
+$("rows").onchange=e=>{const i=e.target.dataset.i;if(i===undefined)return;files[+i].skip=!e.target.checked;render()};
+$("chkAll").onchange=e=>{files.forEach(f=>{if(dest0(f))f.skip=!e.target.checked});render()};
+const ICO={"Images & Graphics":"🖼️","Documents & Text":"📄","Media & Video":"🎬","Developer & Code":"💻","Archives & Zips":"🗜️","System & Installers":"⚙️"};
+const SC=["#d4af37","#0d0d0d","#e3c35a","#6d675a","#b8941f","#f1e2a6","#d8d2c2"];
+function renderMeters(){const p=me().plan||"free",n=LIM[p],x=usage();
+ $("meters").innerHTML=[["Organizers today","s"],["Undos today","u"]].map(([t,k])=>`<div class="meter"><b>${n===Infinity?"∞":x[k]+" / "+n}</b>${t} · ${p.toUpperCase()}<i><u style="width:${n===Infinity?100:Math.min(100,x[k]/n*100)}%"></u></i></div>`).join("")}
+$("dlg").addEventListener("close",()=>{if(me())renderMeters()});
+function renderSpace(){const names=[...Object.keys(CATS),"Other"],sz=names.map(()=>0);
+ files.forEach(f=>{const c=EXT[extOf(f.name)];sz[c?names.indexOf(c):6]+=f.size});
+ const tot=sz.reduce((a,b)=>a+b,0)||1;
+ $("sbar").innerHTML=sz.map((v,i)=>v?`<i style="width:${v/tot*100}%;background:${SC[i]}" title="${esc(names[i])}"></i>`:"").join("");
+ $("legend").innerHTML=sz.map((v,i)=>v?`<span><i style="background:${SC[i]}"></i>${esc(names[i])} ${fmt(v)}</span>`:"").join("");
+ const top=[...files].sort((a,b)=>b.size-a.size).slice(0,3).filter(f=>f.size>0);
+ $("bigFiles").textContent=top.length?"Largest: "+top.map(f=>`${f.name} (${fmt(f.size)})`).join(", "):""}
+const dz=$("pickBox");
+["dragenter","dragover"].forEach(ev=>dz.addEventListener(ev,e=>{e.preventDefault();dz.classList.add("drag")}));
+["dragleave","drop"].forEach(ev=>dz.addEventListener(ev,()=>dz.classList.remove("drag")));
+window.addEventListener("dragover",e=>e.preventDefault());window.addEventListener("drop",e=>{if(!dz.contains(e.target))e.preventDefault()});
+dz.addEventListener("drop",async e=>{e.preventDefault();$("note").textContent="";
+ const it=[...((e.dataTransfer&&e.dataTransfer.items)||[])].find(i=>i.kind==="file");
+ if(!it||!it.getAsFileSystemHandle){$("note").textContent="Dropping folders isn’t supported in this browser. Use Select folder.";return}
+ try{const h=await it.getAsFileSystemHandle();if(!h||h.kind!=="directory"){$("note").textContent="Drop a folder, not a file.";return}
+  if(h.requestPermission&&await h.requestPermission({mode:"readwrite"})!=="granted"){$("note").textContent="Permission wasn’t granted.";return}
+  dir=h;demo=false;moved=[];await scan()}catch(err){$("note").textContent="Couldn’t open that folder: "+err.message}});
+$("upBody").addEventListener("click",e=>{if(e.target.closest("[data-plan]"))$("upDlg").close()});
+loadPrefs();
+try{const u=users();let ch=0;for(const k in u)if(u[k].plan){delete u[k].plan;ch=1}if(ch)LS.set("op_users",JSON.stringify(u))}catch(e){}
+if(me())go("app");
+if(sb)sb.auth.getSession().then(({data})=>{if(data.session){if(!me()){adopt(data.session.user);go("app")}}else if(me()){LS.del("op_session");session=null;go("home")}});
+</script>
+</body>
+</html>
